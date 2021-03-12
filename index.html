@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<style type="text/css">
+	.r,.v,.b{
+		display:inline-block;
+	}
+	h3,p{
+		text-align: center;
+	}
+	#change{
+		width: 100%
+	}
+	.r{
+		color: red;	
+	}
+	.v{
+		color: green;	
+	}
+	.b{
+		color: blue;	
+	}
+</style>
+<script type="text/javascript">
+	function colorchange() {
+		red=document.getElementById('r1').value;
+		green=document.getElementById('r2').value;
+		blue=document.getElementById('r3').value;
+		boite=document.getElementById('change');
+		boite.style.background="rgb("+red+","+green+","+blue+")";
+		document.getElementById('p1').innerHTML=red;
+		document.getElementById('p2').innerHTML=green;
+		document.getElementById('p3').innerHTML=blue;
+	}
+	function rand() {
+		r=Math.floor(Math.random()*256)+1;
+		g=Math.floor(Math.random()*256)+1;
+		b=Math.floor(Math.random()*256)+1;
+		document.getElementById('r1').value=r;
+		document.getElementById('r2').value=g;
+		document.getElementById('r3').value=b;
+		document.getElementById('p1').innerHTML=document.getElementById('r1').value;
+		document.getElementById('p2').innerHTML=document.getElementById('r2').value;
+		document.getElementById('p3').innerHTML=document.getElementById('r3').value;
+		document.getElementById('change').style.background="rgb("+r+","+g+","+b+")";
+
+	}
+</script>
+</head>
+<body>
+	<center>
+	<div class="r">
+	<h3>Rouge</h3>	
+	<input type="range" name="r1" id="r1" oninput="colorchange()" min="0" max="255" value="127">
+	<p id="p1" style="color:red;">127</p>
+	</div>
+	<div class="v">
+	<h3>Vert</h3>	
+	<input type="range" name="r2" id="r2" oninput="colorchange()" min="0" max="255" value="127">
+	<p id="p2"style="color:green;">127</p>
+	</div>
+	<div class="b">
+	<h3>Bleu</h3>	
+	<input type="range" name="r3" id="r3" oninput="colorchange()" min="0" max="255" value="127">
+	<p id="p3"style="color:blue;">127</p>
+	</div>
+	<div id="change"><br><br><br><br><br><br></div>
+	<button onclick="rand()"> Choisir une couleur au hasard</button>
+	</center>
+</body>
+</html>
