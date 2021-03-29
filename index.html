@@ -1,72 +1,164 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title></title>
-<style type="text/css">
-	.r,.v,.b{
-		display:inline-block;
-	}
-	h3,p{
-		text-align: center;
-	}
-	#change{
-		width: 100%
-	}
-	.r{
-		color: red;	
-	}
-	.v{
-		color: green;	
-	}
-	.b{
-		color: blue;	
-	}
-</style>
+<meta charset="UTF-8">
+<title>Evaluation</title>
 <script type="text/javascript">
-	function colorchange() {
-		red=document.getElementById('r1').value;
-		green=document.getElementById('r2').value;
-		blue=document.getElementById('r3').value;
-		boite=document.getElementById('change');
-		boite.style.background="rgb("+red+","+green+","+blue+")";
-		document.getElementById('p1').innerHTML=red;
-		document.getElementById('p2').innerHTML=green;
-		document.getElementById('p3').innerHTML=blue;
-	}
-	function rand() {
-		r=Math.floor(Math.random()*256)+1;
-		g=Math.floor(Math.random()*256)+1;
-		b=Math.floor(Math.random()*256)+1;
-		document.getElementById('r1').value=r;
-		document.getElementById('r2').value=g;
-		document.getElementById('r3').value=b;
-		document.getElementById('p1').innerHTML=document.getElementById('r1').value;
-		document.getElementById('p2').innerHTML=document.getElementById('r2').value;
-		document.getElementById('p3').innerHTML=document.getElementById('r3').value;
-		document.getElementById('change').style.background="rgb("+r+","+g+","+b+")";
+        function GenererCaptcha() {
+            x = ""
+            for (let i = 0; i < 10; i++) {
+                k = Math.floor(Math.random() * 26)+1; 
+                if (k%2 == 0) {
+                    x += String.fromCharCode(k+96)
+                }
+                else{
+                    x += String.fromCharCode(k+64)
+                }
+        
+            }
+            document.getElementById('captcha').value = x
+        }
+        function verif() {
+            hot = document.getElementById('hotel');
+            accueil = document.getElementsByName('accueil');
+            restauration = document.getElementsByName('restauration');
+            extra = document.getElementsByName('extra');
+            captcha = document.getElementById('captcha').value;
+            rcaptcha = document.getElementById('rcaptcha').value;
+            
+            if (hot.selectedIndex < 1) {
+                alert('vous devez selectionner un hotel');
+                hot.focus;
+                return;
+            }
+            ok = false;
+            saccueil = 0;
+            console.log(accueil)
+            accueil.forEach(btn => {
+                if (btn.checked) {
+                    ok = true;
+                    saccueil += Number(btn.value);
+                }
+            });
+            if (ok == false) {
+                alert("vous devez selectionner l'accueil");
+                accueil.focus;
+                return
+            }
+            ok = false;
+            srestauration = 0;
+            restauration.forEach(btn => {
+                if (btn.checked) {
+                    ok = true;
+                    srestauration += Number(btn.value);
+                }
+            });
+            if (!ok) {
+                alert("vous devez selectionner la restauration");
+                restauration.focus;
+                return
+            }
+            s = 0
+            console.log(captcha);
+            for (let i = 0; i < captcha.length; i++) {
+                const lettre = captcha[i];
+                if (lettre.toUpperCase() == lettre) {
+                    s ++
+                }
+            }
+            if (isNaN(rcaptcha)) {
+                alert("votre reponse devez etre un nombre");
+                rcaptcha.focus;
+                return
+            }
+            if (s != Number(rcaptcha) ) {
+                alert("Mauvaise réponse");
+                rcaptcha.focus;
+                return
+            }
+            
+            sextra = 0;
+            extra.forEach(btn => {
+                if (btn.checked) {
+                    sextra += Number(btn.value);
+                }
+            });
+            
+            alert(saccueil + srestauration + sextra)
+        }
+    </script>
+    
+    <style type="text/css">
+        form {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+        table {
+          width: 70%;
+        }
 
-	}
-</script>
+        label {
+          font-size: 20px;
+        }
+    </style>
+
 </head>
-<body>
-	<center>
-	<div class="r">
-	<h3>Rouge</h3>	
-	<input type="range" name="r1" id="r1" oninput="colorchange()" min="0" max="255" value="127">
-	<p id="p1" style="color:red;">127</p>
-	</div>
-	<div class="v">
-	<h3>Vert</h3>	
-	<input type="range" name="r2" id="r2" oninput="colorchange()" min="0" max="255" value="127">
-	<p id="p2"style="color:green;">127</p>
-	</div>
-	<div class="b">
-	<h3>Bleu</h3>	
-	<input type="range" name="r3" id="r3" oninput="colorchange()" min="0" max="255" value="127">
-	<p id="p3"style="color:blue;">127</p>
-	</div>
-	<div id="change"><br><br><br><br><br><br></div>
-	<button onclick="rand()"> Choisir une couleur au hasard</button>
-	</center>
+<body onload="GenererCaptcha()" >
+    <form action=""  onsubmit="return false">
+        <h1>Evaluation d'un hotel</h1>
+        <div>
+            <label for="hotel">Hôtel:</label>
+            <select name="hotel" id="hotel">
+                <option>Choisir un hôtel</option>
+                <option>5 Stars</option>
+                <option>Globe</option>
+                <option>The sun</option>
+            </select>
+        </div>
+        <table border="1">
+            <tr>
+                <th>Accueil: </th>
+                <td>
+                    <label ><input type="radio" name="accueil" value="3" >Tres satisfaisant</label>
+                    <label ><input type="radio" name="accueil" value="2" >satisfaisant</label>
+                    <label ><input type="radio" name="accueil" value="1" >Pas satisfaisant</label>
+                </td>
+            </tr>
+            <tr>
+                <th>Restauration: </th>
+                <td>
+                    <label ><input type="radio" name="restauration" value="3" >Tres satisfaisant</label>
+                    <label ><input type="radio" name="restauration" value="2" >satisfaisant</label>
+                    <label ><input type="radio" name="restauration" value="1" >Pas satisfaisant</label>
+                </td>
+            </tr>
+            <tr>
+                <th>Extra: </th>
+                <td style="display: flex;flex-direction: column;">
+                    <label ><input type="checkbox" name="extra" value="4" >Picine couverte</label>
+                    <label ><input type="checkbox" name="extra" value="2" >Plage privee</label>
+                    <label ><input type="checkbox" name="extra" value="1" >Couverture wifi</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div align='right'>
+                        <label for="captcha"><b>captcha:</b></label>
+                        <input type="text" readonly name="captcha" id="captcha">
+                        <button onclick="GenererCaptcha()" >Actualiser</button>
+                    </div>
+                    <p>Combien de lettres majuscules dans la zone Captcha?</p>
+                    <div align='right'>
+                        <label for="rcaptcha"><b>reponse:</b></label>
+                        <input type="text" name="rcaptcha" id="rcaptcha">
+                    </div>
+                </td>
+            </tr>
+        </table>
+   		<center><input type="submit" onclick="verif()" value="Valider"><input type="reset" value="Annuler"></center>
+</form>
 </body>
 </html>
